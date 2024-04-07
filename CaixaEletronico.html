@@ -1,0 +1,180 @@
+<html>
+
+<head>
+
+	<script>
+
+		/* 
+		- Ao acessar o sistema, pergunte o nome do usuário e diga "Olá {Nome} é um prazer ter você por aqui!".
+		- Na função "inicio", utilize escolha/caso (switch/case) para validar a opção escolhida pelo usuário. 
+		- Sempre que o usuário for sacar dinheiro, o valor restante não pode ser negativo, ou seja, caso o usuário tente sacar mais do que tem em saldo, a ação não deve ocorrer. Exiba uma mensagem de "Operação não autorizada". 
+		- Sempre que o usuário for sacar dinheiro, o valor a ser sacado não pode ser igual ou menor que zero. Exiba uma mensagem de "Operação não autorizada". 
+		- Adicionar a opção para ver o extrato (Coloque algumas compras ou depósitos fictícios). 
+		- Adicionar a opção para fazer uma transferência. A transferência consiste em você informar o número de uma conta (pode ser qualquer número, mas obrigatoriamente um número, ou seja, nenhum outro caractere deve ser aceito), perguntar o valor da transferência e remover o valor da conta da mesma forma como na ação do saldo.
+		Caso o usuário tente transferir mais do que tem em saldo, a ação não deve ocorrer. Exiba uma mensagem de "Operação não autorizada". 
+		- Sempre que o usuário for transferir dinheiro, o valor a ser transferido não pode ser igual ou menor que zero, ou seja, caso o usuário tente transferir mais do que tem em saldo, a ação não deve ocorrer. Exiba uma mensagem de "Operação não autorizada". 
+		- No menu principal, a ordem das opções deve ser: Saldo, Extrato, Saque, Depósito, Transferência e Sair. 
+		- Atualize a função "erro" com as novas opções do menu.
+		- Caso o usuário informe um valor para depósito igual ou menor que zero, não deixe a operação ocorrer. Exiba uma mensagem de "Operação não autorizada". 
+		- Sempre que o usuário for acessar o saldo, sacar, retirar o extrato ou transferir dinheiro é necessário que ele informe uma senha. Essa senha deve ser validada com uma condicional. A senha é 3589.
+		- Caso a senha informada não seja a correta, é necessário chamar a função atual novamente. 
+		- Quando o usuário escolher sair do sistema, exiba uma mensagem agradecendo por utilizar os serviços do banco: "{Nome}, foi um prazer ter você por aqui!".
+		*/
+
+		const senha = 3589;
+		var nome = prompt("Informe seu nome: ");
+		alert("Olá " + nome + ", é um prazer ter você por aqui!")
+
+		var saldo = 100.5; //Float
+		function inicio() {
+
+			var escolha = parseInt(prompt("Selecione uma opção: \n 1) Saldo \n 2) Extrato \n 3) Saque \n 4) Depósito \n 5) Transferência \n 6) Sair"));
+
+			switch (escolha) {
+				case 1: 
+				ver_saldo()
+				break;
+				case 2:
+				extrato()
+				break;
+			    case 3: 
+				fazer_saque()
+				break;
+				case 4:
+				fazer_deposito()
+				break;
+				case 5:
+				fazer_transferencia()
+				break;
+				case 6:
+				sair()
+				break;
+				default:
+				erro();
+			}
+		}		
+
+		function ver_saldo() {
+			var autenticacao = parseInt(prompt("Digite sua senha para realizar a operação: "));
+
+			if (autenticacao !== senha) {
+				alert("Senha incorreta. Tente novamente.");
+				ver_saldo()
+			}
+			
+			alert("Seu saldo atual é: " + saldo);
+			inicio();
+		}
+
+		function extrato () {
+
+			var autenticacao = parseInt(prompt("Digite sua senha para realizar a operação: "));
+
+			if (autenticacao !== senha) {
+				alert("Senha incorreta. Tente novamente.");
+				extrato()
+			}
+
+			alert (" Esse é seu extrato de compras: \n Doceria da Laine: -14 R$ \n Operadora Tim: -30 R$ \n Loja Cyclone: -200 R$ \n Carolina de Cássia: +50 R$ ")
+			inicio()
+		}
+
+		function fazer_saque() {
+			var saque = parseFloat(prompt("Qual o valor para saque?"));
+
+			if (isNaN(saque) || saque === " ") {
+				alert("Por favor, informe um número.");
+				fazer_saque();
+			} else if ( saque > saldo || saque <= 0){
+				alert("Operação não autorizada.");
+				fazer_saque();
+			}
+
+			var autenticacao = parseInt(prompt("Digite sua senha para realizar a operação: "))
+			if (autenticacao !== senha) {
+				alert("Senha incorreta. Tente novamente.");
+				fazer_saque()
+			} else {
+				saldo -= saque;
+				alert("Seu saldo atual é: " + saldo);
+			}
+
+			inicio()
+		}
+
+		function fazer_deposito() {
+
+			var deposito = parseFloat(prompt("Qual o valor para depósito?"));
+			// Not a Number
+			if (isNaN(deposito) || deposito === "") {
+				alert("Por favor, informe um número.");
+				fazer_deposito();
+			} else if (deposito <= 0) {
+				alert("Operação não autorizada.");
+				fazer_deposito();
+			}
+			else {
+				saldo += deposito;
+				alert("Seu saldo atual é: " + saldo);
+			}
+
+			inicio()
+		}
+
+		function fazer_transferencia() {
+
+			var conta_transferencia = parseFloat(prompt("Digite o número da conta para qual deseja realizar a transferência: "));
+
+			if (isNaN(conta_transferencia) || conta_transferencia === "") {
+				alert("Por favor, informe um número.");
+				fazer_transferencia();
+			} 
+			
+			var valor_transferencia = parseFloat(prompt("Qual valor deseja transferir?"));
+
+			if (valor_transferencia > saldo || valor_transferencia <= 0 || isNaN(valor_transferencia)) {
+				alert("Operação não autorizada.");
+				fazer_transferencia();
+			} 
+			
+			var autenticacao = parseInt(prompt("Digite sua senha para realizar a operação: "));
+
+			if (autenticacao !== senha) {
+				alert("Senha incorreta. Tente novamente.");
+				fazer_transferencia()
+			} else {
+				saldo -= valor_transferencia;
+				alert("Seu saldo atual é: " + saldo);
+			}
+
+			inicio()
+		}
+		
+		function sair() {
+
+			var confirma = confirm("Você deseja sair?");
+			if (confirma) {
+				alert(nome + ", foi um prazer ter você por aqui!")
+				window.close();
+			} else {
+				inicio();
+			}
+		}
+
+		function erro() {
+
+			alert("Por favor, informe um número entre 1 e 6");
+			inicio();
+		}
+
+		
+		inicio();
+		
+	</script>
+</head>
+
+<body>
+
+</body>
+
+</html>
